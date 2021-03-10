@@ -13,10 +13,7 @@ Nelle residenze nel circondario di pisa la connessione fornita crea delle sessio
 - installare i requisiti per python
     `pip install -r requirements.txt`
 - __se non in possesso di raspberrypi__
-    - scoprire la versione installata di chrome con 
-	```
-	chromium-browser --product-version
-	```
+    - scoprire la versione installata di chrome con `chromium-browser --product-version`
     - recarsi su https://chromedriver.chromium.org/downloads e scaricare quella più adatta per la versione appena trovata. Se non è presente la versione esatta, scaricare una precendente.
     - Estrarre il pacchetto.
 
