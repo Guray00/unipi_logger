@@ -60,3 +60,10 @@ push "route 172.217.21.67 255.255.255.255 net_gateway"
 ```
 
 assicurati che non vengano violate in qualche configurazione speciale presente nella cartella ccd
+
+## Aggiornare questo script
+```git
+cd /inside/the/program/folder
+git reset --hard
+git pull
+```
