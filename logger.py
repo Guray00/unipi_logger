@@ -80,7 +80,7 @@ def getCredentials():
             logging.warning(" "*22 +"Example: python {} -u <username> -pw <password>".format(sys.argv[0]))
             exit()
 
-    elif(pw == ""):
+        elif(pw == ""):
             logging.error("Aborted, please provide a password with \"-pw\". No connection as been estabilished.")
             logging.warning(" "*22 +"Example: python {} -u <username> -pw <password>".format(sys.argv[0]))
             exit()
