@@ -17,6 +17,11 @@ Nelle residenze nel circondario di pisa la connessione fornita crea delle sessio
     - recarsi su https://chromedriver.chromium.org/downloads e scaricare quella più adatta per la versione appena trovata. Se non è presente la versione esatta, scaricare una precendente.
     - Estrarre il pacchetto.
 
+##Installazione Windows
+- ....
+- Scoprire la versione adatta aprendo Chrome e andando all'indirizzo "chrome://settings/help"
+
+
 ### Nota: RaspberryPi 
 Se l'installazione viene effettuata su un __RaspberryPi__, sarà necessario installare il pacchetto chromedriver apposito per l'architettura armhf. Questa non è più distribuita da anni, ma fortunatamente i creatori di RaspberryPiOS si occupano di ancora di mantenerla aggiornata.
 `sudo apt-get install chromium-chromedriver`
