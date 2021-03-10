@@ -45,3 +45,18 @@ Aggiungere alla routine di sistema
 
 ## Logging
 Tutti i log del programma si trovano nel file logger.log, nel caso in cui il nome del file cambiasse (per qualche motivo) sarà __nomeprogramma.log__, sempre nella stessa cartella dal quale viene eseguito.
+
+## VPN e OpenVPN
+Se stai utilizzando una vpn, e se sei in una residenza __devi__ usare una vpn, ricordati di mantenere fuori dalla route gli indirizzi per l'accesso. Per farlo:
+```bash
+sudo nano /etc/openvpn/server.conf
+```
+
+adesso inserire
+```
+push "route 131.114.101.101 255.255.255.255 net_gateway"
+push "route 131.100.1.1 255.255.255.255 net_gateway"
+push "route 172.217.21.67 255.255.255.255 net_gateway"
+```
+
+assicurati che non vengano violate in qualche configurazione speciale presente nella cartella ccd
