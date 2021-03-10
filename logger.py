@@ -110,7 +110,7 @@ if (not chromedriver_location):
 if (not chromedriver_location):
     if (os.name == 'nt'):
 	    logging.error("Aborting. No default location for chromedriver in windows, provide with \"-l\" or \"--location\".")
-       	    exit()
+	    exit()
     else:
         chromedriver_location = "/usr/bin/chromedriver"
         

@@ -11,7 +11,7 @@ Nelle residenze nel circondario di pisa la connessione fornita crea delle sessio
 - clonare la repo
 `git clone https://github.com/Guray00/unipi_logger`
 - installare i requisiti per python
-    `pip install -r requirements.txt`
+    `pip install -r requirements.txt`. Se stai avendo problemi di compatibilità, utilizza: `pip install -r .\requirements.txt  --use-feature=2020-resolver`
 - __se non in possesso di raspberrypi__
     - scoprire la versione installata di chrome con `chromium-browser --product-version`
     - recarsi su https://chromedriver.chromium.org/downloads e scaricare quella più adatta per la versione appena trovata. Se non è presente la versione esatta, scaricare una precendente.
