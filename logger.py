@@ -16,7 +16,7 @@ import math
 
 #ATEXIT - HANDLING QUIT MESSAGE
 def exit_handler():
-    logging.info("=======================================================")
+    logging.debug("=======================================================")
 atexit.register(exit_handler)
 
 
@@ -48,7 +48,7 @@ logging.basicConfig(filename=sys.argv[0].replace(".py","")+'.log', format='%(asc
 data = dict()
 data["attempts"] = 0
 data["time"] 	 = math.trunc(time.time())
-
+data["last_session"] = -1
 try:
 	# updates local data with the file
 	with open(os.path.dirname(os.path.realpath(__file__)) +'/.data') as json_file:
@@ -72,11 +72,15 @@ def increaseData():
 		exit()
 
 # reset attempts
-def resetData():
+def resetData(success=False):
 	try:# updates local data with the file
 		with open(os.path.dirname(os.path.realpath(__file__)) +'/.data', "w") as json_file:
 				data["attempts"] = 0
-				data["time"] = math.trunc(time.time())
+				data["time"]     = math.trunc(time.time())
+				
+				if (success):
+					data["last_session"] = time.ctime()
+
 				data = json.dump(data, json_file)
 				logging.info("Resetting attempts.")
 	except:
@@ -95,7 +99,8 @@ elif((now - data["time"]) >= 4*60*60):
 ############################################################################
 
 
-#		PROGRAM STARTS HERE
+#			PROGRAM STARTS HERE
+
 
 ############################################################################
 
@@ -144,7 +149,7 @@ def getCredentials():
 
 # If is true, we are already connected, therefore we don't need to try.
 if(check_connection()):
-    logging.info("Already connected, aborting.")
+    logging.debug("Already connected, aborting.")
     exit()
 
 
@@ -191,7 +196,7 @@ except:
 try:
     driver.find_element_by_css_selector("#timeval")
     logging.info("Successfully connected.")
-    resetData()
+    resetData(True)
 
 except:
     increaseData()
