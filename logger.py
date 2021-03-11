@@ -10,6 +10,10 @@ from selenium.webdriver.chrome.options import Options
 import requests
 import logging
 import atexit
+import json
+import datetime
+import math
+
 
 #ATEXIT - HANDLING QUIT MESSAGE
 def exit_handler():
@@ -26,27 +30,75 @@ def getArg(arg):
             return sys.argv[j]
     return False
 
-# HANDLING LOGGING
+# HANDLING LOGGING	===============================================================
 loglevel = getArg("--log")
-numeric_level = 0
 if (loglevel != False):
 	numeric_level = getattr(logging, loglevel.upper(), None)
 	if not isinstance(numeric_level, int):
 		raise ValueError('Invalid log level: %s' % loglevel)
 
 else:
-	loglevel = "debug"
+	loglevel = "info"
 	numeric_level = getattr(logging, loglevel.upper(), None)
 
 logging.basicConfig(filename=sys.argv[0].replace(".py","")+'.log', format='%(asctime)s\t%(levelname)s\t\t%(message)s', level=numeric_level, datefmt= "[%y/%m/%d - %H:%M:%S]")
 
 
 
-######################################
+# HANDLING DATA FILE ==============================================================
+data = dict()
+data["attempts"] = 0
+data["time"] 	 = math.trunc(datetime.datetime.now().timestamp())
+
+try:
+	# updates local data with the file
+	with open('.data') as json_file:
+		data = json.load(json_file)
+
+except:
+	# if file doesn't exists, we make it
+	with open('.data', "w") as json_file:
+		logging.debug(".data not found, making...")
+		json.dump(data, json_file)
+
+# increases attempts
+def increaseData():
+	try:# updates local data with the file
+		with open('.data', "w") as json_file:
+			data["attempts"]+= 1
+			data["time"] = math.trunc(datetime.datetime.now().timestamp())
+			json.dump(data, json_file)
+	except:
+		logging.critical("Aborting, error in increaseData")
+		exit()
+
+# reset attempts
+def resetData():
+	try:# updates local data with the file
+		with open('.data', "w") as json_file:
+				data["attempts"] = 0
+				data["time"] = math.trunc(datetime.datetime.now().timestamp())
+				data = json.dump(data, json_file)
+				logging.info("Resetting attempts.")
+	except:
+		logging.critical("Aborting, error in resetData")
+		exit()
+
+# if has been done more than 15 attempts, we must way 4 hours to retry
+now = math.trunc(datetime.datetime.now().timestamp())
+if (data["attempts"] >= 15 and (now - data["time"]) < 4*60*60):
+	logging.critical("Too many request. ABORTING.")
+	exit()
+
+elif((now - data["time"]) >= 4*60*60):
+	resetData()
+
+############################################################################
+
 
 #		PROGRAM STARTS HERE
 
-######################################
+############################################################################
 
 
 #check if the connection is estabilished
@@ -58,6 +110,7 @@ def check_connection():
         return False
     except requests.ConnectionError:
         return True
+
 
 #retrives login informations
 def getCredentials():
@@ -117,18 +170,32 @@ if (not chromedriver_location):
         
 driver = webdriver.Chrome(executable_path=chromedriver_location, options=options)
 driver.implicitly_wait(3)
-driver.get(WEBPAGE)
+driver.set_page_load_timeout(5)
 
+try:
+	driver.get(WEBPAGE)
+except:
+	increaseData()
+	logging.error("Login page not found, aborting.")
+	exit()
 #print(driver.page_source)
-login    = driver.find_element_by_css_selector("#frmValidator>div>div>div:nth-child(1)> input") .send_keys(CREDENTIALS[0])
-password = driver.find_element_by_css_selector("#frmValidator > div > div > div:nth-child(3) > input").send_keys(CREDENTIALS[1])
-submit	 = driver.find_element_by_css_selector("#frmValidator > div > div > button").click()
+try:
+	login    = driver.find_element_by_css_selector("#frmValidator>div>div>div:nth-child(1)> input") .send_keys(CREDENTIALS[0])
+	password = driver.find_element_by_css_selector("#frmValidator > div > div > div:nth-child(3) > input").send_keys(CREDENTIALS[1])
+	submit	 = driver.find_element_by_css_selector("#frmValidator > div > div > button").click()
+
+except:
+	increaseData()
+	logging.critical("Not loading elements, aborting.")
+	exit()
 
 try:
     driver.find_element_by_css_selector("#timeval")
     logging.info("Successfully connected.")
+    resetData()
 
 except:
+    increaseData()
     logging.critical("Something went wrong, not logged.")
 
 # quitting chrome
