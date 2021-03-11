@@ -49,7 +49,7 @@ crontab -e
 ```
 e poi inserire alla fine del documento:
 ```bash 
-*/2 * * * * python ~/Scripts/unipi_logger/logger.py -u ***REMOVED*** -pw ***REMOVED*** >/dev/null 2>&1
+*/2 * * * * python ~/Scripts/unipi_logger/logger.py -u <USERNAME-HERE>-pw <PASSWORD-HERE> >/dev/null 2>&1
 ```
 Per assicurarsi che le modifiche abbiano effetto, facciamo ripartire il crontab
 ```bash 
