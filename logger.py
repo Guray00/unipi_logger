@@ -46,8 +46,8 @@ logging.basicConfig(filename=sys.argv[0].replace(".py","")+'.log', format='%(asc
 
 # HANDLING DATA FILE ==============================================================
 data = dict()
-data["attempts"] = 0
-data["time"] 	 = math.trunc(time.time())
+data["attempts"]     = 0
+data["time"] 	     = math.trunc(time.time())
 data["last_session"] = -1
 try:
 	# updates local data with the file
@@ -91,14 +91,6 @@ def resetData(success=False):
 		logging.critical("Aborting, error in resetData: "+ e)
 		exit()
 
-# if has been done more than 15 attempts, we must way 4 hours to retry
-now = math.trunc(time.time())
-if (data["attempts"] >= 15 and (now - data["time"]) < 4*60*60):
-	logging.critical("Too many request. ABORTING.")
-	exit()
-
-elif((now - data["time"]) >= 4*60*60):
-	resetData()
 
 ############################################################################
 
@@ -107,7 +99,6 @@ elif((now - data["time"]) >= 4*60*60):
 
 
 ############################################################################
-
 
 #check if the connection is estabilished
 def check_connection():
@@ -136,6 +127,7 @@ def getCredentials():
         elif(i == "-pw" or i == "--password"):
             pw=sys.argv[j]
 
+	#checking correct input
     if(usr == "" or pw == ""):
         if(usr == ""):
             logging.error("Aborted, please provide an user with \"-u\". No connection as been estabilished.")
@@ -149,6 +141,15 @@ def getCredentials():
 
     return [usr,pw]
 
+# if has been done more than 15 attempts, we must way 4 hours to retry
+now = math.trunc(time.time())
+if (data["attempts"] >= 15 and (now - data["time"]) < 4*60*60):
+	logging.critical("Too many request. ABORTING.")
+	exit()
+
+# reset attempts after 4 hours
+elif((now - data["time"]) >= 4*60*60 and data["attempts"] != 0):
+	resetData()
 
 
 # If is true, we are already connected, therefore we don't need to try.
@@ -163,40 +164,48 @@ CREDENTIALS = getCredentials()
 
 #OPTION FOR CHROMEDRIVER
 options = Options()
-options.headless = True
+options.headless = True		#dosn't show the chrome window
 
+#taking chromedriver location checking -l argument
 chromedriver_location = getArg("-l")
 if (not chromedriver_location):
+	#if not found, try with --location
     chromedriver_location = getArg("--location")
 
+#if still not found, checking for default position
 if (not chromedriver_location):
-    if (os.name == 'nt'):
+    if (os.name == 'nt'): #nt = windows
 	    logging.error("Aborting. No default location for chromedriver in windows, provide with \"-l\" or \"--location\".")
 	    exit()
-    else:
+    else:				  #try with debian default
         chromedriver_location = "/usr/bin/chromedriver"
         
 driver = webdriver.Chrome(executable_path=chromedriver_location, options=options)
-driver.implicitly_wait(3)
-driver.set_page_load_timeout(5)
+driver.implicitly_wait(5)		#wait for page max 5 seconds
+driver.set_page_load_timeout(5)	#wait for page max 5 seconds
 
 try:
+	#connecting to the page
 	driver.get(WEBPAGE)
 except:
+	#page dosn't load, giving error
 	increaseData()
 	logging.error("Login page not found, aborting.")
 	exit()
-#print(driver.page_source)
+
+#we are on the page, filling inputs
 try:
 	login    = driver.find_element_by_css_selector("#frmValidator>div>div>div:nth-child(1)> input") .send_keys(CREDENTIALS[0])
 	password = driver.find_element_by_css_selector("#frmValidator > div > div > div:nth-child(3) > input").send_keys(CREDENTIALS[1])
 	submit	 = driver.find_element_by_css_selector("#frmValidator > div > div > button").click()
 
 except:
+	# inputs not found, aborting
 	increaseData()
 	logging.critical("Not loading elements, aborting.")
 	exit()
 
+#cheking if we have successfully connected
 try:
     driver.find_element_by_css_selector("#timeval")
     logging.info("Successfully connected.")
@@ -206,7 +215,7 @@ except:
     increaseData()
     logging.critical("Something went wrong, not logged.")
 
-# quitting chrome
+# closing chrome
 driver.quit()
 
 
