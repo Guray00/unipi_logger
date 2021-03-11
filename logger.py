@@ -62,29 +62,33 @@ except:
 
 # increases attempts
 def increaseData():
+	global data
 	try:# updates local data with the file
 		with open(os.path.dirname(os.path.realpath(__file__)) +'/.data', "w") as json_file:
 			data["attempts"]+= 1
 			data["time"] = math.trunc(time.time())
 			json.dump(data, json_file)
-	except:
-		logging.critical("Aborting, error in increaseData")
+
+	except Exception as e:
+		logging.critical("Aborting, error in increaseData: "+e)
 		exit()
 
 # reset attempts
 def resetData(success=False):
+	global data
 	try:# updates local data with the file
 		with open(os.path.dirname(os.path.realpath(__file__)) +'/.data', "w") as json_file:
-				data["attempts"] = 0
-				data["time"]     = math.trunc(time.time())
-				
-				if (success):
-					data["last_session"] = time.ctime()
+			data["attempts"] = 0
+			data["time"]     = math.trunc(time.time())		
 
-				data = json.dump(data, json_file)
-				logging.info("Resetting attempts.")
-	except:
-		logging.critical("Aborting, error in resetData")
+			if (success):
+				data["last_session"] = time.ctime()
+
+			data = json.dump(data, json_file)
+			logging.info("Resetting attempts.")
+	
+	except Exception as e:
+		logging.critical("Aborting, error in resetData: "+ e)
 		exit()
 
 # if has been done more than 15 attempts, we must way 4 hours to retry
