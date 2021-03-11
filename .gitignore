@@ -6,6 +6,8 @@ bfg-1.14.0.jar
 pw.txt
 .data
 *.log
+*.xml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
