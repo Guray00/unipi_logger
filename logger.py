@@ -4,6 +4,7 @@ WEBPAGE = "http://131.100.1.1"
 
 
 import sys
+import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import requests
@@ -77,12 +78,12 @@ def getCredentials():
     if(usr == "" or pw == ""):
         if(usr == ""):
             logging.error("Aborted, please provide an user with \"-u\". No connection as been estabilished.")
-            logging.warning(" "*22 +"Example: python {} -u <username> -pw <password>".format(sys.argv[0]))
+            logging.warning("Example: python {} -u <username> -pw <password>".format(sys.argv[0]))
             exit()
 
         elif(pw == ""):
             logging.error("Aborted, please provide a password with \"-pw\". No connection as been estabilished.")
-            logging.warning(" "*22 +"Example: python {} -u <username> -pw <password>".format(sys.argv[0]))
+            logging.warning("Example: python {} -u <username> -pw <password>".format(sys.argv[0]))
             exit()
 
     return [usr,pw]
@@ -93,7 +94,7 @@ def getCredentials():
 if(check_connection()):
     logging.info("Already connected, aborting.")
     exit()
-exit()
+
 
 # taking credentials, if wrong input, fails inside the function
 CREDENTIALS = getCredentials()

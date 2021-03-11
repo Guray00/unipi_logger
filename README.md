@@ -42,10 +42,14 @@ Per utilizzare il programma mandare il seguente comando __(senza "<" e ">")__:
 ```
 
 ## Automatizzare
-- Linux
-Aggiungere al chrontab
-
-- Windows
+### Linux
+Aggiungere al crontab
+```bash crontab -e```
+e poi inserire alla fine del documento:
+```bash */2 * * * * python ~/Scripts/unipi_logger/logger.py -u ***REMOVED*** -pw ***REMOVED*** >/dev/null 2>&1```
+Per assicurarsi che le modifiche abbiano effetto, facciamo ripartire il crontab
+```bash sudo /etc/init.d/cron restart```
+### Windows
 Aggiungere alla routine di sistema
 
 ## Logging
