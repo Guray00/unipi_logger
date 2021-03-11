@@ -1,5 +1,10 @@
 # Chromedriver
 chromedriver.exe
+
+# Utility
+bfg-1.14.0.jar
+pw.txt
+
 *.log
 # Byte-compiled / optimized / DLL files
 __pycache__/
