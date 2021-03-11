@@ -11,7 +11,7 @@ import requests
 import logging
 import atexit
 import json
-import datetime
+import time
 import math
 
 #ATEXIT - HANDLING QUIT MESSAGE
@@ -47,7 +47,7 @@ logging.basicConfig(filename=sys.argv[0].replace(".py","")+'.log', format='%(asc
 # HANDLING DATA FILE ==============================================================
 data = dict()
 data["attempts"] = 0
-data["time"] 	 = math.trunc(datetime.datetime.now().timestamp())
+data["time"] 	 = math.trunc(time.time())
 
 try:
 	# updates local data with the file
@@ -65,7 +65,7 @@ def increaseData():
 	try:# updates local data with the file
 		with open(os.path.dirname(os.path.realpath(__file__)) +'/.data', "w") as json_file:
 			data["attempts"]+= 1
-			data["time"] = math.trunc(datetime.datetime.now().timestamp())
+			data["time"] = math.trunc(time.time())
 			json.dump(data, json_file)
 	except:
 		logging.critical("Aborting, error in increaseData")
@@ -76,7 +76,7 @@ def resetData():
 	try:# updates local data with the file
 		with open(os.path.dirname(os.path.realpath(__file__)) +'/.data', "w") as json_file:
 				data["attempts"] = 0
-				data["time"] = math.trunc(datetime.datetime.now().timestamp())
+				data["time"] = math.trunc(time.time())
 				data = json.dump(data, json_file)
 				logging.info("Resetting attempts.")
 	except:
@@ -84,7 +84,7 @@ def resetData():
 		exit()
 
 # if has been done more than 15 attempts, we must way 4 hours to retry
-now = math.trunc(datetime.datetime.now().timestamp())
+now = math.trunc(time.time())
 if (data["attempts"] >= 15 and (now - data["time"]) < 4*60*60):
 	logging.critical("Too many request. ABORTING.")
 	exit()
