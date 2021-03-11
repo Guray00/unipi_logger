@@ -14,7 +14,6 @@ import json
 import datetime
 import math
 
-
 #ATEXIT - HANDLING QUIT MESSAGE
 def exit_handler():
     logging.info("=======================================================")
@@ -52,19 +51,19 @@ data["time"] 	 = math.trunc(datetime.datetime.now().timestamp())
 
 try:
 	# updates local data with the file
-	with open('.data') as json_file:
+	with open(os.path.dirname(os.path.realpath(__file__)) +'/.data') as json_file:
 		data = json.load(json_file)
 
 except:
 	# if file doesn't exists, we make it
-	with open('.data', "w") as json_file:
+	with open(os.path.dirname(os.path.realpath(__file__)) +'/.data', "w") as json_file:
 		logging.debug(".data not found, making...")
 		json.dump(data, json_file)
 
 # increases attempts
 def increaseData():
 	try:# updates local data with the file
-		with open('.data', "w") as json_file:
+		with open(os.path.dirname(os.path.realpath(__file__)) +'/.data', "w") as json_file:
 			data["attempts"]+= 1
 			data["time"] = math.trunc(datetime.datetime.now().timestamp())
 			json.dump(data, json_file)
@@ -75,7 +74,7 @@ def increaseData():
 # reset attempts
 def resetData():
 	try:# updates local data with the file
-		with open('.data', "w") as json_file:
+		with open(os.path.dirname(os.path.realpath(__file__)) +'/.data', "w") as json_file:
 				data["attempts"] = 0
 				data["time"] = math.trunc(datetime.datetime.now().timestamp())
 				data = json.dump(data, json_file)
