@@ -74,7 +74,6 @@ if [[ $clone == "y" ]]; then
 
 
   
-  echo "Cloning repository in \"$dir\""
   if [[ -d "$dir" ]]; then
     printf "\nThis software is ${GREEN}already installed${NC}, if you continue the folder will be deleted and installed again\n"
 	read -p "Do you wanna reinstall?[y/n] " reinstall
@@ -89,7 +88,6 @@ if [[ $clone == "y" ]]; then
   fi  
   
   #cloning dir
-  cd /home/$user
   git clone https://github.com/Guray00/unipi_logger $dir
   
   # installing python deps
