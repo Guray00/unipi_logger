@@ -91,12 +91,12 @@ if [[ $clone == "y" ]]; then
   # installing python deps
   echo "Installing python dependecies..."
   cd /home/$user/unipi_logger
-  if pip install -r requirements.txt --use-feature=2020-resolver; then
-	printf "\n\n${GREEN}Python dependecies installed correctly${NC}"
+  if pip install -r requirements.txt; then
+	printf "\n\n${GREEN}Python dependecies installed correctly${NC}\n\n"
 	# >/dev/null
   else
-	if pip install -r requirements.txt; then
-		printf "\n\n${GREEN}Python dependecies installed correctly${NC}"
+	if pip install -r requirements.txt --use-feature=2020-resolver; then
+		printf "\n\n${GREEN}Python dependecies installed correctly${NC}\n\n"
 	else 
 		something_went_wrong
 		exit
