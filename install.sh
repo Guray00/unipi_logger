@@ -90,7 +90,7 @@ if [[ $clone == "y" ]]; then
   
   #cloning dir
   cd /home/$user
-  git clone https://github.com/Guray00/unipi_logger
+  git clone https://github.com/Guray00/unipi_logger $dir
   
   # installing python deps
   echo "Installing python dependecies..."
