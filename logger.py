@@ -40,7 +40,7 @@ else:
 	loglevel = "info"
 	numeric_level = getattr(logging, loglevel.upper(), None)
 
-logging.basicConfig(filename=sys.argv[0].replace(".py","")+'.log', format='%(asctime)s\t%(levelname)s\t\t%(message)s', level=numeric_level, datefmt= "[%y/%m/%d - %H:%M:%S]")
+logging.basicConfig(filename=sys.argv[0].replace(".py","")+'.log', format='%(asctime)s\t%(levelname)s\t\t%(message)s', level=numeric_level, datefmt= "[%d/%m/%y - %H:%M:%S]")
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
 
