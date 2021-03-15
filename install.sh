@@ -37,7 +37,7 @@ function print_logo(){
   echo ""
   echo ""
   printf "Welcome to Unipi Logger installer! An ${YELLOW}utomatic installer${NC} to automate the login form for Unipi's Residences.\n"
-  echo "You are installing for user \"$user\" in \"/home/$user/unipi_logger\""
+  echo "You are installing for user \"$user\" in \"$dir\""
   read -p "Continue with the installation?[y/n] " clone
 }
 
