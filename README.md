@@ -3,7 +3,14 @@
 ## Cosa è, ma soprattutto perchè
 Nelle residenze nel circondario di pisa la connessione fornita crea delle sessioni da circa 8 ore dopo le quali è necessario riconnettersi. Questo script si occupa di avviare l'accesso in automatico.
 
-## Installazione da Linux
+## Installer linux
+
+Eseguire il comando seguente e lo script di installazione partirà automaticamente.
+```bash
+curl -s https://raw.githubusercontent.com/Guray00/unipi_logger/main/install.sh > /tmp/ul_install.sh && chmod a+x /tmp/ul_install.sh && /tmp/ul_install.sh
+```
+
+## Installazione manuale da Linux
 - installare python e pip
 `sudo apt install python python-pip git chromium-browser`
 - navigare nella cartella nella quale si vuole scaricare il programma
