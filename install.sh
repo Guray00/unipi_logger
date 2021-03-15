@@ -95,11 +95,11 @@ if [[ $clone == "y" ]]; then
   # installing python deps
   echo "Installing python dependecies..."
   cd $dir
-  if pip install -r requirements.txt; then
+  if pip install -r $dir/requirements.txt; then
 	printf "\n\n${GREEN}Python dependecies installed correctly${NC}\n\n"
 	# >/dev/null
   else
-	if pip install -r requirements.txt --use-feature=2020-resolver; then
+	if pip install -r $dir/requirements.txt --use-feature=2020-resolver; then
 		printf "\n\n${GREEN}Python dependecies installed correctly${NC}\n\n"
 	else 
 		something_went_wrong
