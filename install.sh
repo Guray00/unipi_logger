@@ -21,6 +21,7 @@ function something_went_wrong(){
 
 function print_logo(){
   user=$(whoami)
+  dir="/home/$user/.unipi_logger"
 
   echo ""
   echo ""
@@ -47,6 +48,9 @@ function print_logo(){
 clear
 print_logo
 
+user=$(whoami)
+dir="/home/$user/.unipi_logger"
+
 if [[ $clone == "y" ]]; then
   	echo "Installing dependencies (python, pip, chromium, git, chromedriver)..."
 
@@ -69,15 +73,15 @@ if [[ $clone == "y" ]]; then
 	fi
 
 
-  user=$(whoami)
-  echo "Cloning repository in \"/home/$user/unipi_logger\""
-  if [[ -d "/home/$user/unipi_logger" ]]; then
+  
+  echo "Cloning repository in \"$dir\""
+  if [[ -d "$dir" ]]; then
     printf "\nThis software is ${GREEN}already installed${NC}, if you continue the folder will be deleted and installed again\n"
 	read -p "Do you wanna reinstall?[y/n] " reinstall
 	echo ""
 	
 	if [[ $reinstall == "y" ]]; then
-	    sudo rm -R /home/$user/unipi_logger
+	    sudo rm -R $dir
 	else
 	    print_exit
         exit
@@ -90,7 +94,7 @@ if [[ $clone == "y" ]]; then
   
   # installing python deps
   echo "Installing python dependecies..."
-  cd /home/$user/unipi_logger
+  cd $dir
   if pip install -r requirements.txt; then
 	printf "\n\n${GREEN}Python dependecies installed correctly${NC}\n\n"
 	# >/dev/null
