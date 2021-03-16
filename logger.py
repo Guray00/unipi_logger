@@ -147,14 +147,14 @@ def getCredentials():
 
     return [usr,pw]
 
-# if has been done more than 15 attempts, we must way 4 hours to retry
+# if has been done more than 5 attempts, we must way 6 hours to retry
 now = math.trunc(time.time())
-if (data["attempts"] >= 15 and (now - data["time"]) < 4*60*60):
+if (data["attempts"] >= 5 and (now - data["time"]) < 6*60*60):
 	logging.critical("Too many request. ABORTING.")
 	exit()
 
-# reset attempts after 4 hours
-elif((now - data["time"]) >= 4*60*60 and data["attempts"] != 0):
+# reset attempts after 6 hours
+elif((now - data["time"]) >= 6*60*60 and data["attempts"] != 0):
 	resetData()
 
 
