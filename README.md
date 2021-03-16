@@ -46,7 +46,8 @@ Per utilizzare il programma mandare il seguente comando __(senza "<" e ">")__:
     --log:      inserire il livello di log (tra debug, info, warning, error, critical)
     -l:         posizione per individuare la posizione del chromedriver (necessario per windows)
     --location: posizione per individuare la posizione del chromedriver (necessario per windows)
-    --force:    forza il tentativo di connessione nonostante siano stati raggiunti i 5 tentativi. Necessario per far ripartire il programma dopo un eventuale cambio di credenziali.
+    --force:    forza il tentativo di connessione nonostante siano stati raggiunti i 5 tentativi. 
+		Necessario per far ripartire il programma dopo un eventuale cambio di credenziali.
 ```
 
 ## Automatizzare
