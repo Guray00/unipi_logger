@@ -29,6 +29,13 @@ def getArg(arg):
             return sys.argv[j]
     return False
 
+def getFlag(arg):
+    j = 0
+    for i in sys.argv:
+        if(i == arg):
+            return True
+    return False
+
 # HANDLING LOGGING	===============================================================
 loglevel = getArg("--log")
 if (loglevel != False):
@@ -148,14 +155,19 @@ def getCredentials():
     return [usr,pw]
 
 # if has been done more than 5 attempts, we must way 6 hours to retry
+# trash: and (now - data["time"]) < 6*60*60
+
+
+
+
 now = math.trunc(time.time())
-if (data["attempts"] >= 5 and (now - data["time"]) < 6*60*60):
+if (data["attempts"] >= 5 and not getFlag("--force")):
 	logging.critical("Too many request. ABORTING.")
 	exit()
 
 # reset attempts after 6 hours
-elif((now - data["time"]) >= 6*60*60 and data["attempts"] != 0):
-	resetData()
+#elif((now - data["time"]) >= 6*60*60 and data["attempts"] != 0):
+#	resetData()
 
 
 # If is true, we are already connected, therefore we don't need to try.
