@@ -5,7 +5,7 @@ Nelle residenze nel circondario di pisa la connessione fornita crea delle sessio
 
 ## Installer linux
 
-Eseguire il comando seguente e lo script di installazione partirà automaticamente.
+Eseguire il comando seguente e lo script di installazione partirà automaticamente. _Funziona con WSL._
 ```bash
 curl -s https://raw.githubusercontent.com/Guray00/unipi_logger/main/install.sh > /tmp/ul_install.sh && chmod a+x /tmp/ul_install.sh && /tmp/ul_install.sh
 ```

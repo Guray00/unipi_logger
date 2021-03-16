@@ -78,6 +78,12 @@ def resetData(success=False):
 	global data
 	try:# updates local data with the file
 		with open(os.path.dirname(os.path.realpath(__file__)) +'/.data', "w") as json_file:
+			
+			if(data["attempts"] != 0):
+				logging.info("Resetting attempts.")
+			else:
+				logging.debug("Resetting attempts.")
+
 			data["attempts"] = 0
 			data["time"]     = math.trunc(time.time())		
 
@@ -85,7 +91,7 @@ def resetData(success=False):
 				data["last_session"] = time.ctime()
 
 			data = json.dump(data, json_file)
-			logging.info("Resetting attempts.")
+			
 	
 	except Exception as e:
 		logging.critical("Aborting, error in resetData: "+ e)
