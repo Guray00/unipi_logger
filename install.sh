@@ -102,7 +102,7 @@ if [[ $clone == "y" ]]; then
   	echo "Installing dependencies (python, pip, chromium, git, chromedriver)..."
 
 	if sudo apt-get -qq install python git chromium-browser chromium-chromedriver python-pip -y; then
-		printf "\n\n${GREEN}Dependecies installed correctly${NC}\n"
+		printf "\n${GREEN}Dependecies installed correctly${NC}\n"
 	
 	else
 		echo ""
@@ -122,12 +122,18 @@ if [[ $clone == "y" ]]; then
   
   if [[ -d "$dir" ]]; then
     echo ""
-    printf "\nThis software is ${GREEN}already installed${NC}, if you continue the folder will be deleted and installed again\n"
-	read -p "Do you wanna reinstall?[y/n] " reinstall
-	echo ""
+    printf "This software is ${GREEN}already installed${NC}, if you continue the folder will be deleted and installed again\n"
+	read -p "Do you wanna (r)einstall (u)pdate or (a)bort?[r/u/a] " reinstall
 	
-	if [[ $reinstall == "y" ]]; then
+	if [[ $reinstall == "r" ]]; then
 	    sudo rm -R $dir
+		git clone https://github.com/Guray00/unipi_logger $dir
+
+	elif [[ $reinstall == "u" ]]; then
+		cd $dir
+		git reset --hard
+		git pull
+
 	else
 	    print_exit
         exit
@@ -135,7 +141,7 @@ if [[ $clone == "y" ]]; then
   fi  
   
   #cloning dir
-  git clone https://github.com/Guray00/unipi_logger $dir
+  #git clone https://github.com/Guray00/unipi_logger $dir
   
   # installing python deps
   echo ""
