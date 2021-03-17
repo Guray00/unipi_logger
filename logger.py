@@ -229,9 +229,9 @@ try:
     logging.info("Successfully connected.")
     resetData(True)
 
-except:
+except Exception as e:
     increaseData()
-    logging.critical("Something went wrong, not logged.")
+    logging.critical("Something went wrong, not logged: " + e)
     exit(-2)
 
 # closing chrome
