@@ -18,8 +18,8 @@ function something_went_wrong(){
 }
 
 function program_is_working(){
-	echo "${GREEN}Working${NC}, but if you were already logged could be a ${GREEN}false positive${NC}."
-	echo "If the script wont work in future, consider to ${GREEN}reinstall (safer)${NC} or change user and pw in the configuration"
+	printf "\n${GREEN}Working${NC}, but if you were already logged could be a ${GREEN}false positive${NC}.\n"
+	printf "If the script wont work in future, consider to ${GREEN}reinstall (safer)${NC} or change user and pw in the configuration\n"
 }
 
 function print_logo(){
