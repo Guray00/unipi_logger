@@ -19,7 +19,7 @@ function something_went_wrong(){
 
 function program_is_working(){
 	printf "\n${GREEN}Working${NC}, but if you were already logged could be a ${GREEN}false positive${NC}.\n"
-	printf "If the script wont work in future, consider to ${GREEN}reinstall (safer)${NC} or change user and pw in the configuration\n"
+	printf "If the script wont work in future, consider to ${GREEN}reinstall (safer)${NC} or change user and pw in the configuration\n\n"
 }
 
 function print_logo(){
@@ -143,12 +143,12 @@ if [[ $clone == "y" ]]; then
   cd $dir
   if pip install -r $dir/requirements.txt; then
     echo ""
-	printf "\n\n${GREEN}Python dependecies installed correctly${NC}\n\n"
+	printf "\n${GREEN}Python dependecies installed correctly${NC}\n"
 	# >/dev/null
   else
 	if pip install -r $dir/requirements.txt --use-feature=2020-resolver; then
 	    echo ""
-		printf "\n\n${GREEN}Python dependecies installed correctly${NC}\n\n"
+		printf "\n${GREEN}Python dependecies installed correctly${NC}\n"
 	else 
 		something_went_wrong
 		exit
