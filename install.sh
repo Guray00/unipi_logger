@@ -122,7 +122,7 @@ if [[ $clone == "y" ]]; then
   
   if [[ -d "$dir" ]]; then
     echo ""
-    printf "This software is ${GREEN}already installed${NC}, if you continue the folder will be deleted and installed again\n"
+    printf "This software is ${GREEN}already installed${NC}.\n"
 	read -p "Do you wanna (r)einstall (u)pdate or (a)bort?[r/u/a] " reinstall
 	
 	if [[ $reinstall == "r" ]]; then
