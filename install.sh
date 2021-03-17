@@ -22,6 +22,14 @@ function program_is_working(){
 	printf "If the script wont work in future, consider to ${GREEN}reinstall (safer)${NC} or change user and pw in the configuration\n\n"
 }
 
+function python_dependencies_installed(){
+	printf "\n${GREEN}Python dependecies installed correctly${NC}\n"
+}
+
+function dependencies_installed(){
+	printf "\n${GREEN}Dependecies installed correctly${NC}\n"
+}
+
 function print_logo(){
   user=$(whoami)
   dir="/home/$user/.unipi_logger"
@@ -52,6 +60,7 @@ function cron_check(){
 function script_check(){
 	user=$(whoami)
   	dir="/home/$user/.unipi_logger"
+	  
   	read -p "Insert your username (Alice): " usr
 	read -p "Insert your password: " pw
 
@@ -102,14 +111,14 @@ if [[ $clone == "y" ]]; then
   	echo "Installing dependencies (python, pip, chromium, git, chromedriver)..."
 
 	if sudo apt-get -qq install python git chromium-browser chromium-chromedriver python-pip -y; then
-		printf "\n${GREEN}Dependecies installed correctly${NC}\n"
+		dependencies_installed
 	
 	else
 		echo ""
 		
 		printf "${RED}Error with python-pip${NC}. Trying with python3-pip...\n"
 		if sudo apt-get -qq install python git chromium-browser chromium-chromedriver python3-pip -y; then
-			printf "${GREEN}Dependecies installed correctly${NC}\n"
+			dependencies_installed
 		else
 			something_went_wrong
 			exit
@@ -148,13 +157,12 @@ if [[ $clone == "y" ]]; then
   echo "Installing python dependecies..."
   cd $dir
   if pip install -r $dir/requirements.txt; then
-    echo ""
-	printf "\n${GREEN}Python dependecies installed correctly${NC}\n"
-	# >/dev/null
+    python_dependencies_installed
+
   else
 	if pip install -r $dir/requirements.txt --use-feature=2020-resolver; then
-	    echo ""
-		printf "\n${GREEN}Python dependecies installed correctly${NC}\n"
+	    python_dependencies_installed
+	
 	else 
 		something_went_wrong
 		exit
