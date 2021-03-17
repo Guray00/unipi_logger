@@ -5,7 +5,6 @@ RED='\033[0;31m'
 NC='\033[0m'     # No Color
 
 function print_exit(){
-  	echo "";
 	echo "";
 	printf "Not installing, ${RED}aborting${NC}. Nothing has been changed.";
 	echo "Thanks for choosing us.";
@@ -13,7 +12,6 @@ function print_exit(){
 }
 
 function something_went_wrong(){
-	echo ""
 	echo ""
 	printf "\n\n${RED}Something went wrong during the installation process. Nothing has been changed, aborting.${NC}"
     echo ""
@@ -33,6 +31,7 @@ function print_logo(){
   printf "${NC}\n"
   printf "${YELLOW}\____/_//_/_/ .__/_/ /____/\___/\_, /\_, /\__/_/   ${NC}\n"
   printf "${YELLOW}           /_/                 /___//___/          ${NC}\n"
+  echo ""
   printf "${YELLOW}===================================================${NC}\n"
   echo ""
   echo ""
@@ -59,7 +58,6 @@ if [[ $clone == "y" ]]; then
 	
 	else
 		echo ""
-		echo ""
 		
 		printf "${RED}Error with python-pip${NC}. Trying with python3-pip...\n"
 		if sudo apt-get -qq install python git chromium-browser chromium-chromedriver python3-pip -y; then
@@ -75,6 +73,7 @@ if [[ $clone == "y" ]]; then
 
   
   if [[ -d "$dir" ]]; then
+    echo ""
     printf "\nThis software is ${GREEN}already installed${NC}, if you continue the folder will be deleted and installed again\n"
 	read -p "Do you wanna reinstall?[y/n] " reinstall
 	echo ""
@@ -91,13 +90,16 @@ if [[ $clone == "y" ]]; then
   git clone https://github.com/Guray00/unipi_logger $dir
   
   # installing python deps
+  echo ""
   echo "Installing python dependecies..."
   cd $dir
   if pip install -r $dir/requirements.txt; then
+    echo ""
 	printf "\n\n${GREEN}Python dependecies installed correctly${NC}\n\n"
 	# >/dev/null
   else
 	if pip install -r $dir/requirements.txt --use-feature=2020-resolver; then
+	    echo ""
 		printf "\n\n${GREEN}Python dependecies installed correctly${NC}\n\n"
 	else 
 		something_went_wrong
