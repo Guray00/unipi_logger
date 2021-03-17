@@ -40,6 +40,51 @@ function print_logo(){
   read -p "Continue with the installation?[y/n] " clone
 }
 
+function cron_check(){
+	crontab -l | grep -q 'unipi_logger' && return true || return false
+}
+
+function script_check(){
+	user=$(whoami)
+  	dir="/home/$user/.unipi_logger"
+  	read -p "Insert your username (Alice): " usr
+	read -p "Insert your password: " pw
+
+	python $dir/logger.py -u $usr -pw $pw --log debug --force >/dev/null 2>&1
+	ret=$?
+
+	if [ $ret == 254 ]; then
+		echo "Wrong input"
+		script_check
+
+	elif [ $ret == 1 ]; then
+			python3 $dir/logger.py -u $usr -pw $pw --log debug --force
+			ret=$?
+
+			if [ $ret == 254 ]; then
+			echo "Wrong input"
+			script_check
+
+			elif [ $ret -ne 0 ];then
+				echo "Script not working"
+				something_went_wrong
+
+			else
+				echo "Working, but if you were already logged could be a false positive."
+				echo "If the script wont work in future, consider to reinstall (safe) or change user and pw in the configuration"
+			fi
+
+
+	elif [ $ret -ne 0 ];then
+				echo "Script not working"
+				something_went_wrong
+
+	else
+		echo "Working, but if you were already logged could be a false positive."
+		echo "If the script wont work in future, consider to reinstall (safe) or change user and pw in the configuration"
+	fi
+}
+
 
 # ============================
 # 	START HERE
@@ -106,6 +151,13 @@ if [[ $clone == "y" ]]; then
 		exit
 	fi
   fi
+
+  #checking if the script works
+  script_check
+
+  #cron check
+  x=cron_check
+
 # don't want to install  
 else
   print_exit

@@ -78,7 +78,7 @@ def increaseData():
 
 	except Exception as e:
 		logging.critical("Aborting, error in increaseData: "+e)
-		exit()
+		exit(-1)
 
 # reset attempts
 def resetData(success=False):
@@ -102,7 +102,7 @@ def resetData(success=False):
 	
 	except Exception as e:
 		logging.critical("Aborting, error in resetData: "+ e)
-		exit()
+		exit(-1)
 
 
 ############################################################################
@@ -145,12 +145,12 @@ def getCredentials():
         if(usr == ""):
             logging.error("Aborted, please provide an user with \"-u\". No connection as been estabilished.")
             logging.warning("Example: python {} -u <username> -pw <password>".format(sys.argv[0]))
-            exit()
+            exit(-2)
 
         elif(pw == ""):
             logging.error("Aborted, please provide a password with \"-pw\". No connection as been estabilished.")
             logging.warning("Example: python {} -u <username> -pw <password>".format(sys.argv[0]))
-            exit()
+            exit(-2)
 
     return [usr,pw]
 
@@ -163,7 +163,7 @@ def getCredentials():
 now = math.trunc(time.time())
 if (data["attempts"] >= 5 and not getFlag("--force")):
 	logging.critical("Too many request. ABORTING.")
-	exit()
+	exit(-1)
 
 # reset attempts after 6 hours
 #elif((now - data["time"]) >= 6*60*60 and data["attempts"] != 0):
@@ -209,7 +209,7 @@ except:
 	#page dosn't load, giving error
 	increaseData()
 	logging.error("Login page not found, aborting.")
-	exit()
+	exit(-1)
 
 #we are on the page, filling inputs
 try:
@@ -221,7 +221,7 @@ except:
 	# inputs not found, aborting
 	increaseData()
 	logging.critical("Not loading elements, aborting.")
-	exit()
+	exit(-1)
 
 #cheking if we have successfully connected
 try:
@@ -232,6 +232,7 @@ try:
 except:
     increaseData()
     logging.critical("Something went wrong, not logged.")
+    exit(-2)
 
 # closing chrome
 driver.quit()
