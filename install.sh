@@ -17,6 +17,11 @@ function something_went_wrong(){
     echo ""
 }
 
+function program_is_working(){
+	echo "${GREEN}Working${NC}, but if you were already logged could be a ${GREEN}false positive${NC}."
+	echo "If the script wont work in future, consider to ${GREEN}reinstall (safer)${NC} or change user and pw in the configuration"
+}
+
 function print_logo(){
   user=$(whoami)
   dir="/home/$user/.unipi_logger"
@@ -70,8 +75,7 @@ function script_check(){
 				something_went_wrong
 
 			else
-				echo "Working, but if you were already logged could be a false positive."
-				echo "If the script wont work in future, consider to reinstall (safe) or change user and pw in the configuration"
+				program_is_working
 			fi
 
 
@@ -80,8 +84,7 @@ function script_check(){
 				something_went_wrong
 
 	else
-		echo "Working, but if you were already logged could be a false positive."
-		echo "If the script wont work in future, consider to reinstall (safe) or change user and pw in the configuration"
+		program_is_working
 	fi
 }
 
