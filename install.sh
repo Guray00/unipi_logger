@@ -20,6 +20,9 @@ function something_went_wrong(){
 function program_is_working(){
 	printf "\n${GREEN}Working${NC}, but if you were already logged could be a ${GREEN}false positive${NC}.\n"
 	printf "If the script wont work in future, consider to ${GREEN}reinstall (safer)${NC} or change user and pw in the configuration\n\n"
+
+	printf "\nYou should add to the crontab file (crontab -e) the line:\n\n"
+	printf "*/2 * * * * python ~/.unipi_logger/logger.py -u $1 -pw $2 >/dev/null 2>&1\n\n"
 }
 
 function python_dependencies_installed(){
@@ -84,7 +87,7 @@ function script_check(){
 				something_went_wrong
 
 			else
-				program_is_working
+				program_is_working $usr $pw
 			fi
 
 
@@ -93,23 +96,12 @@ function script_check(){
 				something_went_wrong
 
 	else
-		program_is_working
+		program_is_working $usr $pw
 	fi
 }
 
 
-# ============================
-# 	START HERE
-# ============================
-clear
-print_logo
-
-user=$(whoami)
-dir="/home/$user/.unipi_logger"
-
-if [[ $clone == "y" ]]; then
-  	echo "Installing dependencies (python, pip, chromium, git, chromedriver)..."
-
+function debian_deps(){
 	if sudo apt-get -qq install python git chromium-browser chromium-chromedriver python-pip -y; then
 		dependencies_installed
 	
@@ -126,47 +118,88 @@ if [[ $clone == "y" ]]; then
 	
 		#exit
 	fi
+}
 
-
-  
-  if [[ -d "$dir" ]]; then
-    echo ""
-    printf "This software is ${GREEN}already installed${NC}.\n"
-	read -p "Do you wanna (r)einstall (u)pdate or (a)bort?[r/u/a] " reinstall
+function arch_deps(){
+	if sudo pacman -Syu --quiet --noconfirm python git python-pip; then
+		yay -Syu --noconfirm --quiet chromedriver
+		dependencies_installed
 	
-	if [[ $reinstall == "r" ]]; then
-	    sudo rm -R $dir
-		git clone https://github.com/Guray00/unipi_logger $dir
+	else
+		echo ""
+		
+		printf "${RED}Error with python-pip${NC}. Trying with python3-pip...\n"
+		if sudo pacman -Syu --quiet --noconfirm python git chromium-browser chromium-chromedriver python3-pip; then
+			yay -Syu --noconfirm --quiet chromedriver
+			dependencies_installed
+		else
+			something_went_wrong
+			exit
+		fi
+	
+		#exit
+	fi
+}
 
-	elif [[ $reinstall == "u" ]]; then
-		cd $dir
-		git reset --hard
-		git pull
+# ============================
+# 	START HERE
+# ============================
+
+#probe os here
+apt -v >>.log 2>&1
+if [ $? -eq 0 ]
+then
+	DISTRO=DEBIAN
+fi
+pacman -V >>.log 2>&1
+if [ $? -eq 0 ]
+then
+	DISTRO=ARCH
+fi
+
+echo "Detected system type: " $DISTRO
+
+clear
+print_logo
+
+user=$(whoami)
+dir="/home/$user/.unipi_logger"
+
+if [[ $clone == "y" ]]; then
+  	echo "Installing dependencies (python, pip, chromium, git, chromedriver)..."
+
+	if [[ $DISTRO == "DEBIAN" ]]; then 
+		debian_deps
+	
+	elif [[ $DISTRO == "ARCH" ]]; then 
+		arch_deps
+	
 
 	else
-	    print_exit
-        exit
-	fi
-  fi  
-  
-  #cloning dir
-  #git clone https://github.com/Guray00/unipi_logger $dir
-  
-  # installing python deps
-  echo ""
-  echo "Installing python dependecies..."
-  cd $dir
-  if pip install -r $dir/requirements.txt; then
-    python_dependencies_installed
-
-  else
-	if pip install -r $dir/requirements.txt --use-feature=2020-resolver; then
-	    python_dependencies_installed
-	
-	else 
-		something_went_wrong
+		echo "NOT RECOGNIZED QUITTING"
 		exit
 	fi
+
+	#cloning dir
+	if ! git clone https://github.com/Guray00/unipi_logger $dir 2>/dev/null && [ -d "${dir}" ] ; then
+		echo "Clone failed because the folder ${dir} exists, no problem."
+	fi
+	
+	# installing python deps
+	echo ""
+	echo "Installing python dependecies..."
+	cd $dir
+	if pip install -r $dir/requirements.txt; then
+		python_dependencies_installed
+
+	else
+		if pip install -r $dir/requirements.txt --use-feature=2020-resolver; then
+			python_dependencies_installed
+		
+		else 
+			something_went_wrong
+			exit
+		fi
   fi
 
   #checking if the script works

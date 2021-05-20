@@ -1,5 +1,6 @@
 # Chromedriver
 chromedriver.exe
+.vscode
 
 # Utility
 bfg-1.14.0.jar
