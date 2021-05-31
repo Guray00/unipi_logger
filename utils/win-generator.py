@@ -1,6 +1,6 @@
 import sys
 import platform
-#import imp
+import stdiomask
 
 print("\nWelcome to unipi-logger automate creator for Windows!")
 print("You are currently using:")
@@ -8,7 +8,9 @@ print(" > Python EXE     : " + sys.executable)
 print(" > Architecture   : " + platform.architecture()[0]+"\n")
 
 usr      = input("Insert user: ")
-pw       = input("Insert password: ")
+pw = stdiomask.getpass()
+
+script_location = input("Insert installation absolute path: ")
 location = input("Insert chromedriver absolute path: ")
 
 cmd = """<?xml version="1.0" encoding="UTF-16"?>
@@ -61,7 +63,7 @@ cmd = """<?xml version="1.0" encoding="UTF-16"?>
       <Arguments>{}</Arguments>
     </Exec>
   </Actions>
-</Task>""".format(sys.executable, "-u {} -pw {} -l {}".format(usr, pw, location))
+</Task>""".format(sys.executable, f"{script_location}/logger.py -u {usr} -pw {pw} -l {location}")
 
 f = open("import_this.xml", "w")
 f.write(cmd)
