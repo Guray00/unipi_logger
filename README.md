@@ -30,8 +30,12 @@ Se l'installazione viene effettuata su un __RaspberryPi__, sarà necessario inst
 `sudo apt-get install chromium-chromedriver`
 
 ## Installazione Windows
-- ....
+- Installare python da [qua](https://www.python.org/downloads/)
+- Installare le dipendenze dello script aprendo nella cartella del programma la powershell e digitando ```python pip3 install -r requirements.txt```
 - Scoprire la versione adatta aprendo Chrome e andando all'indirizzo "chrome://settings/help"
+- Scaricare la verisione più adatta di chromedriver da [qui](https://chromedriver.chromium.org/downloads)
+- Eseguire lo script `win-generator.py` dentro utils
+- Importare la routine di sistema appena generata su `pianificazione di sistema`
 
 ## Utilizzo
 Per utilizzare il programma mandare il seguente comando __(senza "<" e ">")__:
