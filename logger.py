@@ -13,6 +13,11 @@ import atexit
 import json
 import time
 import math
+import argparse
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--restart-after", type=int, default=-1, help="Force resetting attempts after given time")
 
 #ATEXIT - HANDLING QUIT MESSAGE
 def exit_handler():
@@ -165,9 +170,13 @@ if (data["attempts"] >= 5 and not getFlag("--force")):
 	logging.critical("Too many request. ABORTING.")
 	exit(-1)
 
-# reset attempts after 6 hours
-#elif((now - data["time"]) >= 6*60*60 and data["attempts"] != 0):
-#	resetData()
+# not given resetting time, exit
+elif(args.restart_after <= 0):
+	exit(-1)
+	
+# given resetting time
+elif((now - data["time"]) >= args.restart_after*60*60 and data["attempts"] != 0):
+	resetData()
 
 
 # If is true, we are already connected, therefore we don't need to try.
