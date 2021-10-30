@@ -19,6 +19,9 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--restart-after", type=int, default=-1, help="Force resetting attempts after given time")
 
+#args = parser.parse_args()
+
+
 #ATEXIT - HANDLING QUIT MESSAGE
 def exit_handler():
     logging.debug("=======================================================")
@@ -133,14 +136,15 @@ def check_connection():
     except requests.ConnectionError:
         try:
             # proviamo a vedere se google risponde, se risponde allora
-            # siamo già connessi
-            __ = requests.get("8.8.8.8", timeout=timeout)
+            # siamo gia connessi
+            __ = requests.get("http://google.com", timeout=3)
             return True
 		
-        # errore nuovamente, ciò significa che non siamo connessi
+        # errore nuovamente, questo significa che non siamo connessi
         # ne alla residenza ne a internet
-        except requests.ConnectionError:
-            logging.critical(f"CRITICAL: no connection avaiable. I can't establish a connection with Unipi Gateway({WEBPAGE}) and Google server (8.8.8.8).")
+        except requests.ConnectionError as e:
+            print(e)
+            logging.critical("NO CONNECTION avaiable. I can't establish a connection with Unipi Gateway and Google server.")
             return False
     
     return False
@@ -189,12 +193,12 @@ if (data["attempts"] >= 5 and not getFlag("--force")):
 	exit(-1)
 
 # not given resetting time, exit
-elif(args.restart_after <= 0):
-	exit(-1)
+#elif(args.restart_after <= 0):
+#	exit(-1)
 	
 # given resetting time
-elif((now - data["time"]) >= args.restart_after*60*60 and data["attempts"] != 0):
-	resetData()
+#elif((now - data["time"]) >= args.restart_after*60*60 and data["attempts"] != 0):
+#	resetData()
 
 
 # If is true, we are already connected, therefore we don't need to try.
