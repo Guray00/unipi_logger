@@ -122,11 +122,29 @@ def resetData(success=False):
 def check_connection():
     url=WEBPAGE
     timeout=1
+
+    # proviamo a connetterci al gateway della residenza, se risponde
+    # allora non siamo ancora connessi
     try:
         _ = requests.get(url, timeout=timeout)
         return False
+
+    # se non risponde, potremmo essere collegati (il gateway non risponde da connessi)
     except requests.ConnectionError:
-        return True
+        try:
+            # proviamo a vedere se google risponde, se risponde allora
+            # siamo già connessi
+            __ = requests.get("8.8.8.8", timeout=timeout)
+            return True
+		
+        # errore nuovamente, ciò significa che non siamo connessi
+        # ne alla residenza ne a internet
+        except requests.ConnectionError:
+            logging.critical(f"CRITICAL: no connection avaiable. I can't establish a connection with Unipi Gateway({WEBPAGE}) and Google server (8.8.8.8).")
+            return False
+    
+    return False
+
 
 
 #retrives login informations
@@ -208,7 +226,7 @@ if (not chromedriver_location):
         chromedriver_location = "/usr/bin/chromedriver"
         
 driver = webdriver.Chrome(executable_path=chromedriver_location, options=options)
-driver.implicitly_wait(5)		#wait for page max 5 seconds
+driver.implicitly_wait(2)		#wait for element max 5 seconds
 driver.set_page_load_timeout(5)	#wait for page max 5 seconds
 
 try:
