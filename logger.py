@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 WEBPAGE = "http://131.100.1.1"
-
+#WEBPAGE = "https://cp-dsu2.unipi.it/login.php"
 
 import sys
 import os
@@ -75,7 +75,7 @@ except:
 		logging.debug(".data not found, making...")
 		json.dump(data, json_file)
 
-# increases attempts
+# increase attempts
 def increaseData():
 	global data
 	try:# updates local data with the file
@@ -123,30 +123,20 @@ def resetData(success=False):
 
 #check if the connection is estabilished
 def check_connection():
-    url=WEBPAGE
-    timeout=1
+    url="https://google.com"
+    timeout=3
 
-    # proviamo a connetterci al gateway della residenza, se risponde
-    # allora non siamo ancora connessi
+    # proviamo a connetterci, se risponde
+    # allora siamo ancora connessi
     try:
         _ = requests.get(url, timeout=timeout)
-        return False
+        return True
 
-    # se non risponde, potremmo essere collegati (il gateway non risponde da connessi)
-    except requests.ConnectionError:
-        try:
-            # proviamo a vedere se google risponde, se risponde allora
-            # siamo gia connessi
-            __ = requests.get("http://google.com", timeout=3)
-            return True
+    # se non risponde non siamo collegati
+    except Exception as e:
+        logging.log("error " + e)
+        return False
 		
-        # errore nuovamente, questo significa che non siamo connessi
-        # ne alla residenza ne a internet
-        except requests.ConnectionError as e:
-            print(e)
-            logging.critical("NO CONNECTION avaiable. I can't establish a connection with Unipi Gateway and Google server.")
-            return False
-    
     return False
 
 
@@ -230,8 +220,9 @@ if (not chromedriver_location):
         chromedriver_location = "/usr/bin/chromedriver"
         
 driver = webdriver.Chrome(executable_path=chromedriver_location, options=options)
-driver.implicitly_wait(2)		#wait for element max 5 seconds
+driver.implicitly_wait(3)		#wait for element max 5 seconds
 driver.set_page_load_timeout(5)	#wait for page max 5 seconds
+
 
 try:
 	#connecting to the page
@@ -244,25 +235,26 @@ except:
 
 #we are on the page, filling inputs
 try:
-	login    = driver.find_element_by_css_selector("#frmValidator>div>div>div:nth-child(1)> input") .send_keys(CREDENTIALS[0])
+	login    = driver.find_element_by_css_selector("#frmValidator > div > div > div:nth-child(1) > input").send_keys(CREDENTIALS[0])
 	password = driver.find_element_by_css_selector("#frmValidator > div > div > div:nth-child(3) > input").send_keys(CREDENTIALS[1])
 	submit	 = driver.find_element_by_css_selector("#frmValidator > div > div > button").click()
 
-except:
+except Exception as e:
 	# inputs not found, aborting
 	increaseData()
-	logging.critical("Not loading elements, aborting.")
-	exit(-1)
+	logging.critical("Not loading elements, aborting: "+str(e))
+        exit(-1)
 
 #cheking if we have successfully connected
 try:
-    driver.find_element_by_css_selector("#timeval")
+    driver.find_element_by_css_selector("#timebox")
     logging.info("Successfully connected.")
     resetData(True)
 
 except Exception as e:
     increaseData()
-    logging.critical("Something went wrong, not logged: " + e)
+    logging.critical("Something went wrong, not logged: " + str(e))
+    print(str(driver.page_source.encode("utf-8")))
     exit(-2)
 
 # closing chrome
